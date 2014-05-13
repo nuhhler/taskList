@@ -14,9 +14,9 @@ taskListApp.controller("TaskListCtrl", ['$scope', '$http', function($scope, $htt
 		});
 	};
 
-	$scope.executeTask = function(taskId) {
+	$scope.executeTask = function(taskId, taskIsDone) {
 		console.log("task is modified: " + taskId);
-		$http.post("/executetask", taskId).success(function(data) {
+		$http.post("/executetask", angular.toJson({_id:taskId, isDone:taskIsDone})).success(function(data) {
 			//$scope.taskList.push( angular.fromJson(data) );
 			;
 		});
@@ -27,7 +27,7 @@ taskListApp.controller("TaskListCtrl", ['$scope', '$http', function($scope, $htt
 		$http.post("/removetask", taskId).success(function(data) {
 			// remove task from taskList
 			for( var i=0; i<$scope.taskList.length; i++ ) {
-      			if( $scope.taskList[i].id == taskId ) {
+      			if( $scope.taskList[i]._id == taskId ) {
         			break;
       			}
     		}

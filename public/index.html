@@ -10,9 +10,9 @@
 	<div align="center"><h3>Task List</h3></div>
 	<ul>
 		<li ng-repeat="task in taskList">
-			<input type="checkbox" ng-model="task.isDone" ng-change="executeTask(task.id)">
+			<input type="checkbox" ng-model="task.isDone" ng-change="executeTask(task._id, task.isDone)">
 			{{task.name}}
-			[ <a href="" ng-click="removeTask(task.id)">x</a> ]
+			[ <a href="" ng-click="removeTask(task._id)">x</a> ]
 		</li>
 	</ul>
 
