@@ -34,5 +34,4 @@ taskListApp.controller("TaskListCtrl", ['$scope', '$http', function($scope, $htt
     		$scope.taskList.splice(i, 1);
 		});
 	};	
-
 }]);

@@ -1,5 +1,6 @@
 var http = require('http');
 var url = require('url');
+var MongoClient = require('mongodb').MongoClient;
 
 function start(route, handle) {
   function onRequest( req, res ) {
