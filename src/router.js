@@ -1,9 +1,10 @@
 
 
-function route( handle, pathname, response, postData ) {
+function route( handle, pathname, response, postData, cookie ) {
   console.log("About to route a request for " + pathname);
   if (typeof handle[pathname] === 'function') {
-    handle[pathname]( response, postData );
+  	var userId = cookie ? JSON.parse(cookie).userId : null;
+    handle[pathname]( response, postData, userId );
   } else {
     console.log("No request handler found for " + pathname);
     response.writeHead(404, {"Content-Type": "text/plain"});

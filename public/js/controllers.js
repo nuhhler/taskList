@@ -1,8 +1,8 @@
 'use strict';
 
-var taskListApp = angular.module('taskListApp', []);
+var taskListControllers = angular.module('taskListControllers', []);
 
-taskListApp.controller("TaskListCtrl", ['$scope', '$http', function($scope, $http) {
+taskListControllers.controller("TaskListCtrl", ['$scope', '$http', function($scope, $http) {
 	$http.get("/tasklist").success(function(data) {
 		$scope.taskList = angular.fromJson(data);
 	});
@@ -34,4 +34,13 @@ taskListApp.controller("TaskListCtrl", ['$scope', '$http', function($scope, $htt
     		$scope.taskList.splice(i, 1);
 		});
 	};	
+}]);
+
+taskListControllers.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $http,$location) {
+	$scope.login = function(credentials) {
+		console.log("login: " + credentials.username + " " + credentials.password);
+		$http.post("/login", angular.toJson( credentials )).success(function(data) {
+			$location.path('/tasklist');
+	 	});
+	};
 }]);

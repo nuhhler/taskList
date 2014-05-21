@@ -6,17 +6,17 @@ function start(route, handle) {
   function onRequest( req, res ) {
   	var postData = "";
   	var pathname = url.parse(req.url).pathname;
+    var cookie = req.headers["cookie"];
 
   	req.setEncoding("utf8");
     
     req.addListener("data", function(postDataChunk) {
       postData += postDataChunk;
-      console.log("Received POST data chunk '"+
-      postDataChunk + "'.");
+      console.log("Received POST data chunk '"+ postDataChunk + "'.");
     });
 
     req.addListener("end", function() {
-      route(handle, pathname, res, postData);
+      route(handle, pathname, res, postData, cookie);
     });
   }
 
