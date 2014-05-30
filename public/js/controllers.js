@@ -14,7 +14,7 @@ taskListControllers.controller("TaskListCtrl", ['$scope', '$http', '$location', 
 		});
 
 	$scope.addTask = function() {
-		console.log($scope.newTaskName);
+		console.log("add task: "+ $scope.newTaskName);
 		$http.post("/addtask", $scope.newTaskName).
 			success(function(data) {
 				$scope.taskList.push( angular.fromJson(data) );
@@ -56,13 +56,30 @@ taskListControllers.controller("TaskListCtrl", ['$scope', '$http', '$location', 
 					$location.path('/login');
 				}
 			});
-	};	
+	};
+	
+	$scope.logout = function() {
+		console.log("logout");
+		$http.post("/logout", $scope.newTaskName).
+			success(function(data) {
+				$location.path('/login');
+			}).
+			error( function(data){
+				$location.path('/login');
+			});
+	};
+
 }]);
 
 taskListControllers.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
-	$scope.login = function(credentials) {
-		console.log("login: " + credentials.username + " " + credentials.password);
-		$http.post("/login", angular.toJson( credentials )).success(function(data) {
+	$http.get("/login").
+		success(function(data) {
+			$scope.credentials = angular.fromJson(data);
+		});
+
+	$scope.authorize = function(credentials) {
+		console.log("authorize: " + credentials.username + " " + credentials.password);
+		$http.post("/authorize", angular.toJson( credentials )).success(function(data) {
 			$location.path('/tasklist');
 	 	});
 	};

@@ -129,8 +129,49 @@ function executeTask(response, postData, theSessionId) {
   });
 }
 
-function login(response, postData, theSessionId) {
+function logout(response, postData, theSessionId) {
+  console.log("Request handler 'logout' was called.");
+  checkSession( response, theSessionId, function( err, aUserId ) {
+    if(err) {
+      return;
+    }
+
+    redisClient.del( theSessionId );
+    response.writeHead(200, {"Set-Cookie": "" ,"Content-Type": "text/plain"});
+    response.end();
+  });
+}
+
+function login (response, postData, theSessionId) {
   console.log("Request handler 'login' was called.");
+  redisClient.get(theSessionId, function( err, reply) {
+    if( err ) { // internal error
+      console.error( "Can't check sessionId: " + err );
+      response.writeHead(500, {"Content-Type": "text/plain"});
+      response.end();
+    } else if ( reply == null) {
+      response.writeHead(200, { "Content-Type": "text/plain"});
+      response,write(JSON.stringify({ username:"", password: ""}));
+      response.end();
+    }
+    else {
+      userCol.findOne( new ObjectID(reply), function(err, document) {
+        if( document == null ) {
+          console.log("user does not exists");
+          response.writeHead(500, {"Set-Cookie": "", "Content-Type": "text/plain"});
+        }
+        else {
+          response.writeHead(200, { "Content-Type": "text/plain"} );
+          response.write(JSON.stringify(document));
+        }
+        response.end();
+      });
+    }
+  });
+}
+
+function authorize(response, postData, theSessionId) {
+  console.log("Request handler 'authorize' was called.");
   redisClient.get(theSessionId, function( err, reply) {
     if( err ) { // internal error
       console.error( "Can't check sessionId: " + err );
@@ -190,4 +231,6 @@ exports.addTask = addTask;
 exports.taskList = taskList;
 exports.removeTask = removeTask;
 exports.executeTask = executeTask;
+exports.authorize = authorize;
 exports.login = login;
+exports.logout = logout;

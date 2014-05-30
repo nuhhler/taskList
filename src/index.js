@@ -7,6 +7,8 @@ handle["/addtask"] = requestHandlers.addTask;
 handle["/tasklist"] = requestHandlers.taskList;
 handle["/removetask"] = requestHandlers.removeTask;
 handle["/executetask"] = requestHandlers.executeTask;
+handle["/authorize"] = requestHandlers.authorize;
 handle["/login"] = requestHandlers.login;
+handle["/logout"] = requestHandlers.logout;
 
 server.start( router.route, handle );
